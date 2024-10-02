@@ -1,5 +1,7 @@
 import json
 
+from .parsing import read_file
+
 
 def generate_diff(file_path1, file_path2):
     first_file = read_file(file_path1)
@@ -15,10 +17,6 @@ def generate_diff(file_path1, file_path2):
                                   diff_function, diff_post_processing)
 
     return diff_output_str
-
-
-def read_file(file_path):
-    return json.load(open(file_path))
 
 
 def diff_engine(first_file, second_file, keys_union,
