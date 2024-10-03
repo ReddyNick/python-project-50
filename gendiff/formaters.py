@@ -9,7 +9,7 @@ def stylish_lines(diff_tree, padding=4):
     output = []
     for key, node in diff_tree.items():
         change_type = node['change_type']
-        if change_type == 'edit':
+        if change_type == 'update':
             value1, value2 = node['value']
 
             value1_lines = stringify(value1)
@@ -37,7 +37,6 @@ def stylish_lines(diff_tree, padding=4):
                                             prefix, padding)
             output.extend(diff_lines)
 
-    # output = map(lambda s: '  ' + s, output)
     output = ['{', *output, '}']
     return output
 

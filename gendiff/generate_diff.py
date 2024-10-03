@@ -24,35 +24,34 @@ def create_diff_tree(first_file, second_file):
         children = None
 
         # remove
-        if first_has_key and not second_has_key:
+        if not second_has_key:
             change_type = 'remove'
             value = first_file[key]
 
         # add
-        elif not first_has_key and second_has_key:
+        elif not first_has_key:
             change_type = 'add'
             value = second_file[key]
 
-        elif first_has_key and second_has_key:
+        else:
             first_value, second_value = first_file[key], second_file[key]
 
+            # remain
+            if first_value == second_value:
+                change_type = 'remain'
+                value = first_value
+
             # recursive step for nested dicts
-            if isinstance(first_value, dict) and isinstance(second_value, dict):
+            elif (isinstance(first_value, dict)
+                  and isinstance(second_value, dict)):
                 change_type = 'remain'
                 value = None
                 children = create_diff_tree(first_value, second_value)
 
-            # if any value is not dict
+            # update
             else:
-                # remain
-                if first_value == second_value:
-                    change_type = 'remain'
-                    value = first_file[key]
-
-                # edit
-                else:
-                    change_type = 'edit'
-                    value = [first_file[key], second_file[key]]
+                change_type = 'update'
+                value = [first_file[key], second_file[key]]
 
         diff_tree[key] = {
             'change_type': change_type,
