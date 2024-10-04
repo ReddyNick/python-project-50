@@ -15,7 +15,7 @@ def generate_diff(file_path1, file_path2, format_name='stylish'):
     elif format_name == 'plain':
         diff_str = plain_formater(diff_tree)
     elif format_name == 'json':
-        print(json.dumps(diff_tree))
+        diff_str = json.dumps(diff_tree)
     else:
         raise Exception(f'Unknown format name {format_name}!')
 
