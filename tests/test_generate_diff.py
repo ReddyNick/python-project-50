@@ -2,7 +2,7 @@ import pytest
 
 from pathlib import Path
 from gendiff import generate_diff
-from gendiff.formaters import stringify
+from gendiff.formaters.stylish import stringify
 
 
 def test_stringify():
@@ -46,8 +46,19 @@ def inputs_flat():
 def inputs_nested():
     file_path1 = 'tests/fixtures/test_nested/file1.json'
     file_path2 = 'tests/fixtures/test_nested/file2.json'
+    return (file_path1, file_path2)
+
+
+@pytest.fixture
+def expected_nested():
     expected = open('tests/fixtures/test_nested/json_diff_expected.txt').read()
-    return (file_path1, file_path2, expected)
+    return expected
+
+
+@pytest.fixture
+def expected_nested_plain():
+    expected = open('tests/fixtures/test_nested/plain_diff_expected.txt').read()
+    return expected
 
 
 def test_generate_diff_json_inputs(inputs_flat):
@@ -68,6 +79,12 @@ def test_generate_diff_mixed_inputs(inputs_flat):
     assert generate_diff(file_path1, file_path2) == expected
 
 
-def test_generate_diff_nested_json_inputs(inputs_nested):
-    file_path1, file_path2, expected = inputs_nested
-    assert generate_diff(file_path1, file_path2) == expected
+def test_generate_diff_nested_json_inputs(inputs_nested, expected_nested):
+    file_path1, file_path2 = inputs_nested
+    assert generate_diff(file_path1, file_path2) == expected_nested
+
+
+def test_generate_diff_nested_plain(inputs_nested, expected_nested_plain):
+    file_path1, file_path2 = inputs_nested
+    output = generate_diff(file_path1, file_path2, 'plain')
+    assert output == expected_nested_plain
