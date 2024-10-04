@@ -1,3 +1,4 @@
+import json
 from gendiff.parsing import read_file
 from gendiff.formaters import stylish
 from gendiff.formaters import plain_formater
@@ -13,6 +14,8 @@ def generate_diff(file_path1, file_path2, format_name='stylish'):
         diff_str = stylish(diff_tree)
     elif format_name == 'plain':
         diff_str = plain_formater(diff_tree)
+    elif format_name == 'json':
+        print(json.dumps(diff_tree))
     else:
         raise Exception(f'Unknown format name {format_name}!')
 
